@@ -107,7 +107,7 @@ export class MQTTHandlerImpl implements MQTTHandler {
 		message: string,
 	): void {
 		const measurement = {
-			measurementType: MeasurementType.TEMPERATURE,
+			measurementType: MeasurementType.TEMPERATURE.toString(),
 			date: moment().format('YYYY-MM-DD HH:mm:ss'),
 			deviceHostname: topic.split('/')[1],
 			value: message,
@@ -124,7 +124,7 @@ export class MQTTHandlerImpl implements MQTTHandler {
 	 */
 	public lightCallback(store: Store, topic: string, message: string): void {
 		const measurement = {
-			measurementType: MeasurementType.LIGHT,
+			measurementType: MeasurementType.LIGHT.toString(),
 			date: moment().format('YYYY-MM-DD HH:mm:ss'),
 			deviceHostname: topic.split('/')[1],
 			value: message,

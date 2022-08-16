@@ -1,0 +1,8 @@
+version: '3'
+services:
+  web:
+    container_name: web
+    image: dk25/web
+    restart: unless-stopped
+    ports:
+      - 80:80
