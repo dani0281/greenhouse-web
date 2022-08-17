@@ -3,6 +3,7 @@ import {
 	Area,
 	AreaChart,
 	CartesianGrid,
+	ResponsiveContainer,
 	Tooltip,
 	XAxis,
 	YAxis,
@@ -22,6 +23,7 @@ function getRandomColor() {
 const MeasurementChart: React.FC<{
 	measurementType: MeasurementType;
 	deviceHostname: string;
+	domain: number[];
 }> = (p) => {
 	const [color, setColor] = useState<string | undefined>();
 
@@ -33,9 +35,6 @@ const MeasurementChart: React.FC<{
 		setColor(getRandomColor());
 	}, [p]);
 
-	const domain =
-		p.measurementType === MeasurementType.LIGHT ? [0, 1] : undefined;
-
 	return (
 		<div className="relative">
 			<dt>
@@ -43,19 +42,21 @@ const MeasurementChart: React.FC<{
 					{`${p.deviceHostname} (${p.measurementType})`}
 				</p>
 			</dt>
-			<dd className="mt-2 ml-16 text-base text-gray-500">
-				<AreaChart width={500} height={200} data={measurements}>
-					<CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
-					<XAxis dataKey="date" angle={10} interval={20} fontSize={12} />
-					<YAxis domain={domain} />
-					<Area
-						type="monotone"
-						dataKey="value"
-						stroke={(color && `#${color}`) || undefined}
-						fill={(color && `#${color}`) || undefined}
-					/>
-					<Tooltip />
-				</AreaChart>
+			<dd className="mt-2 text-base text-gray-500">
+				<ResponsiveContainer width="100%" height={200}>
+					<AreaChart data={measurements}>
+						<CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
+						<XAxis dataKey="date" angle={10} interval={20} fontSize={12} />
+						<YAxis domain={p.domain} />
+						<Area
+							type="monotone"
+							dataKey="value"
+							stroke={(color && `#${color}`) || undefined}
+							fill={(color && `#${color}`) || undefined}
+						/>
+						<Tooltip />
+					</AreaChart>
+				</ResponsiveContainer>
 			</dd>
 		</div>
 	);
@@ -86,22 +87,36 @@ const App: React.FC = (p) => {
 				</div>
 
 				<div className="mt-10">
-					<dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+					<dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
 						<MeasurementChart
 							measurementType={MeasurementType.TEMPERATURE}
 							deviceHostname="dk25-1"
+							domain={[0, 60]}
 						/>
 						<MeasurementChart
 							measurementType={MeasurementType.LIGHT}
 							deviceHostname="dk25-1"
+							domain={[0, 1]}
+						/>
+						<MeasurementChart
+							measurementType={MeasurementType.HUMIDITY}
+							deviceHostname="dk25-1"
+							domain={[20, 90]}
 						/>
 						<MeasurementChart
 							measurementType={MeasurementType.TEMPERATURE}
 							deviceHostname="dk25-2"
+							domain={[0, 60]}
 						/>
 						<MeasurementChart
 							measurementType={MeasurementType.LIGHT}
 							deviceHostname="dk25-2"
+							domain={[0, 1]}
+						/>
+						<MeasurementChart
+							measurementType={MeasurementType.HUMIDITY}
+							deviceHostname="dk25-2"
+							domain={[20, 90]}
 						/>
 					</dl>
 				</div>

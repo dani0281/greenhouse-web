@@ -1,11 +1,16 @@
 export class MeasurementType {
 	public static TEMPERATURE = new MeasurementType('temperature');
 	public static LIGHT = new MeasurementType('light');
+	public static HUMIDITY = new MeasurementType('humidity');
 
 	constructor(public readonly name: string) {}
 
 	public static values(): MeasurementType[] {
-		return [MeasurementType.TEMPERATURE, MeasurementType.LIGHT];
+		return [
+			MeasurementType.TEMPERATURE,
+			MeasurementType.LIGHT,
+			MeasurementType.HUMIDITY,
+		];
 	}
 
 	public static get(name: string): MeasurementType | undefined {

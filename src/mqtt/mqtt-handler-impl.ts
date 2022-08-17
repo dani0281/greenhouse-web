@@ -55,6 +55,11 @@ export class MQTTHandlerImpl implements MQTTHandler {
 					callback: this.temperatureCallback,
 				},
 				{ key: 'light', topic: 'light/+', callback: this.lightCallback },
+				{
+					key: 'humidity',
+					topic: 'humidity/+',
+					callback: this.humidityCallback,
+				},
 			],
 		);
 	}
@@ -125,6 +130,23 @@ export class MQTTHandlerImpl implements MQTTHandler {
 	public lightCallback(store: Store, topic: string, message: string): void {
 		const measurement = {
 			measurementType: MeasurementType.LIGHT.toString(),
+			date: moment().format('YYYY-MM-DD HH:mm:ss'),
+			deviceHostname: topic.split('/')[1],
+			value: message,
+		} as Measurement;
+
+		store.dispatch(addMeasurement(measurement));
+	}
+
+	/**
+	 * Callback for the humidity topic
+	 * @param store The redux store to dispatch the measurement to
+	 * @param topic The topic of the message
+	 * @param message The message
+	 */
+	public humidityCallback(store: Store, topic: string, message: string): void {
+		const measurement = {
+			measurementType: MeasurementType.HUMIDITY.toString(),
 			date: moment().format('YYYY-MM-DD HH:mm:ss'),
 			deviceHostname: topic.split('/')[1],
 			value: message,
